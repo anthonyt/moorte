@@ -59,38 +59,45 @@ var MooRTE = new Class({
 		}
 
 		els.each(function(el,index){
-			if(el.get('tag') == 'textarea' || el.get('tag') == 'input') els[index] = el = self.textArea(el); 
-			if(l=='e' || !rte) rte = self.insertToolbar(l);	
+			if(el.get('tag') == 'textarea' || el.get('tag') == 'input') els[index] = el = self.textArea(el);
+			if(l=='e' || !rte) rte = self.insertToolbar(l);
 			if(l=='b' || l=='t' || !l) el.set('contentEditable', true);
 			else l=='e' ? self.positionToolbar(el,rte) : el.set('contentEditable',true).addEvents({
 				'focus': function(){ self.positionToolbar(el, rte); },
-				'blur':function(){ 
+				'blur':function(){
 					this.setStyle('padding-top', this.getStyle('padding-top').slice(0,-2) - rte.getFirst().getSize().y).removeClass('rteShow');
-					rte.addClass('rteHide'); 
+					rte.addClass('rteHide');
 				}
 			});
 			el.store('bar', rte).addEvents({
-				'mouseup':MooRTE.Utilities.updateBtns, 
-				'keyup'  :MooRTE.Utilities.updateBtns, 
-				'keydown':MooRTE.Utilities.shortcuts, 
-				'focus'  :function(){ MooRTE.activeField = this; MooRTE.activeBar = rte; } 
+				'mouseup':MooRTE.Utilities.updateBtns,
+				'keyup'  :MooRTE.Utilities.updateBtns,
+				'keydown':MooRTE.Utilities.shortcuts,
+				'focus'  :function(){ MooRTE.activeField = this; MooRTE.activeBar = rte; }
 			});
 		});
 		rte.store('fields', els);
 		
-		MooRTE.activeBar = (MooRTE.activeField = els[0]).retrieve('bar');
-		if(l=='t') rte.addClass('rtePageTop').getFirst().addClass('rteTopDown');
-		else if(l=='b') rte.addClass('rtePageBottom');
+		MooRTE.activeField = els[0];
+		MooRTE.activeBar = MooRTE.activeField.retrieve('bar');
+		if (l=='t') {
+			rte.addClass('rtePageTop').getFirst().addClass('rteTopDown');
+		} else if (l=='b') {
+			rte.addClass('rtePageBottom');
+		}
 		
-		if(Browser.Engine.gecko) MooRTE.Utilities.exec('styleWithCSS');
-		// MooRTE.Utilities.exec('useCSS', 'true'); - FF2, perhaps other browsers?
+		if(Browser.Engine.gecko) {
+			MooRTE.Utilities.exec('styleWithCSS');
+		}
 	},
-	
+
 	insertToolbar: function (pos){
 		var self = this;
-		var rte = new Element('div', {'class':'rteRemove MooRTE '+(!pos||pos=='n'?'rteHide':''), 'contentEditable':false }).adopt(
+		var rte = new Element('div', {'class':'rteRemove MooRTE '+(!pos||pos=='n'?'rteHide':''), 'contentEditable':false });
+		rte.adopt(
 			 new Element('div', {'class':'RTE '+self.options.skin })
-		).inject(document.body);
+		);
+		rte.inject(document.body);
 		MooRTE.activeBar = rte; // not used!
 		MooRTE.Utilities.addElements(this.options.buttons, rte.getFirst(), 'bottom', 'rteGroup_Auto'); ////3rdel. Should give more appropriate name. Also, allow for last of multiple classes  
 		return rte;
@@ -102,7 +109,6 @@ var MooRTE = new Class({
 		rte.removeClass('rteHide').setStyle('width', elSize.width-(f?0:bw[1]*1+bw[3]*1));
 		var rteHeight = rte.getFirst().getCoordinates().height;
 		if(f) rte.setStyles({ 'left':elSize.left, 'top':(elSize.top - rteHeight > 0 ? elSize.top : elSize.bottom) }).addClass('rteFloat').getFirst().addClass('rteFloat');
-		//else rte.inject(el,'top').setStyle('margin','-'+el.getStyle('padding-top')+' -'+el.getStyle('padding-left'));
 		else el.setStyle('padding-top', el.getStyle('padding-top').slice(0,-2)*1 + rteHeight).grab(rte,'top');
 	},
 	
@@ -206,9 +212,13 @@ MooRTE.Utilities = {
 	exec: function(args){
 		args = $A(arguments).flatten();  // Deprecated? Used to be able to pass in array, I think we use .pass([array]) for that now.
 		var g = (Browser.Engine.gecko && 'ju,in,ou'.contains(args[0].substr(0,2).toLowerCase()));
-		if(g) document.designMode = 'on';
+		if(g) {
+			document.designMode = 'on';
+		}
 		document.execCommand(args[0], args[2]||null, args[1]||false);
-		if(g) document.designMode = 'off';
+		if(g) {
+			document.designMode = 'off';
+		}
 	},
 	
 	shortcuts: function(e){
@@ -226,14 +236,18 @@ MooRTE.Utilities = {
 	},
 	
 	updateBtns: function(e){
-		var val, update = MooRTE.activeBar.retrieve('update');
+		var val;
+		var update = MooRTE.activeBar.retrieve('update');
 
 		update.state.each(function(vals){
 			if(vals[2]) vals[2].bind(vals[1])(vals[0]);
 			else { window.document.queryCommandState(vals[0]) ? vals[1].addClass('rteSelected') : vals[1].removeClass('rteSelected');}
 		});
 		update.value.each(function(vals){
-			if(val = window.document.queryCommandValue(vals[0])) vals[2].bind(vals[1])(vals[0], val);
+			val = window.document.queryCommandValue(vals[0]);
+			if (val) {
+				vals[2].bind(vals[1])(vals[0], val);
+			}
 		});
 		update.custom.each(function(){
 			vals[2].bind(vals[1])(vals[0]);
@@ -272,7 +286,10 @@ MooRTE.Utilities = {
 			var e = parent.getElement('[class~='+name+']'||'.rte'+btn);
 			
 			if(!e || name == 'rteGroup_Auto'){
-				var bgPos = 0, val = MooRTE.Elements[btn], input = 'text,password,submit,button,checkbox,file,hidden,image,radio,reset'.contains(val.type), textarea = (val.element && val.element.toLowerCase() == 'textarea');
+				var bgPos = 0;
+				var val = MooRTE.Elements[btn];
+				var input = 'text,password,submit,button,checkbox,file,hidden,image,radio,reset'.contains(val.type);
+				var textarea = (val.element && val.element.toLowerCase() == 'textarea');
 				var state = 'bold,italic,underline,strikethrough,subscript,superscript,insertorderedlist,insertunorderedlist,unlink,'.contains(btn.toLowerCase()+',');
 				
 				var properties = $H({
