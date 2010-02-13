@@ -378,9 +378,13 @@ MooRTE.Utilities = {
 		MooRTE.Utilities.eventHandler('onShow', this, name);	
 	},
 	
+	
 	assetLoader:function(args){
-		try{ Depender }catch(e){ var Not = 1 };
-		if (Not) return; //if (!Depender){ var Depender; return;}
+		try {
+			Depender;
+		} catch(e) {
+			return function(){}
+		};
 		
 		if (!this.assetsLoaded){
 			Depender.setOptions({
