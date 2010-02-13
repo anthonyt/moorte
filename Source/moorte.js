@@ -33,13 +33,31 @@ var MooRTE = new Class({
 	
 	Implements: [Options],
 
-	options:{floating: false,location: 'elements',buttons: 'div.Menu:[Main,File,Insert]',skin: 'Word03',elements: 'textarea, .rte'},
+	options: {
+		floating: false,
+		location: 'elements',
+		buttons: 'div.Menu:[Main,File,Insert]',
+		skin: 'Word03',
+		elements: 'textarea, .rte',
+		mooRTEopts: {
+			path: 'js/sources.json'
+			ranges: {},
+			activeField: '',
+			activeBar: '',
+		}
+	},
 	
 	initialize: function(options){
 		this.setOptions(options);
-		var self = this, rte, els = $$(this.options.elements), l = this.options.location.substr(4,1).toLowerCase();
-		if(!MooRTE.activeField) MooRTE.extend({ranges:{}, activeField:'', activeBar:'' });
-		
+		var self = this;
+		var els = $$(this.options.elements);
+		var l = this.options.location.substr(4,1).toLowerCase();
+		var rte;
+
+		if (!MooRTE.activeField) {
+			MooRTE.extend(this.options.mooRTEopts);
+		}
+
 		els.each(function(el,index){
 			if(el.get('tag') == 'textarea' || el.get('tag') == 'input') els[index] = el = self.textArea(el); 
 			if(l=='e' || !rte) rte = self.insertToolbar(l);	
@@ -101,7 +119,6 @@ var MooRTE = new Class({
 	}
 });
 
-if(!MooRTE.Path) MooRTE.Path = 'js/sources.json';
 MooRTE.Range = {
 	create: function(range){
 		var sel = window.document.selection || window.getSelection();
