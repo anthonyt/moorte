@@ -51,7 +51,7 @@ Options
 	- Should the RTE be inserted into the element (affecting page layout) or should it float above it.
  - elements: 'textarea, .rte' - What elements should the RTE extend.
      - Only applicable when called with the new keyword [var mrte = new MooRTE({elements:'textarea'}) ])
-	
+ - mooRTEopts: { path: 'js/sources.json' } - The path to use with the Depender resource loader.
 
 Customization:
 ---------
