@@ -40,10 +40,10 @@ var MooRTE = new Class({
 		skin: 'Word03',
 		elements: 'textarea, .rte',
 		mooRTEopts: {
-			path: 'js/sources.json'
 			ranges: {},
 			activeField: '',
 			activeBar: '',
+			path: 'js/sources.json'
 		}
 	},
 	
