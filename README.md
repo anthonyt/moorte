@@ -51,7 +51,7 @@ Options
 	- Should the RTE be inserted into the element (affecting page layout) or should it float above it.
  - elements: 'textarea, .rte' - What elements should the RTE extend.
      - Only applicable when called with the new keyword [var mrte = new MooRTE({elements:'textarea'}) ])
- - mooRTEopts: { path: 'js/sources.json' } - The path to use with the Depender resource loader.
+ - mooRTEopts: { path: 'js/sources.json' } - The path to use with the Depender resource loader. See Customization section below.
 
 Customization:
 ---------
@@ -61,10 +61,12 @@ Customization:
 This is the path to your sources.json file.<br>
 By default, is "js/sources.json"
 
-If you have your own folder structure, modify this path, or no plugins will work! 
+If you have your own folder structure, modify this path, or no plugins will work!
 
     MooRTE.Path = 'Javascripts/2010/mootools/classes/experiments/moorte/scripts.json';
     $('myEl').moorte();`
+
+Note that you can also set a custom path in the options dict. (See above)
 
 
 ### MooRTE.Elements
