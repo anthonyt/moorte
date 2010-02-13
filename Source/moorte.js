@@ -109,7 +109,8 @@ var MooRTE = new Class({
 		rte.removeClass('rteHide').setStyle('width', elSize.width-(f?0:bw[1]*1+bw[3]*1));
 		var rteHeight = rte.getFirst().getCoordinates().height;
 		if(f) rte.setStyles({ 'left':elSize.left, 'top':(elSize.top - rteHeight > 0 ? elSize.top : elSize.bottom) }).addClass('rteFloat').getFirst().addClass('rteFloat');
-		else el.setStyle('padding-top', el.getStyle('padding-top').slice(0,-2)*1 + rteHeight).grab(rte,'top');
+		else el.grab(rte,'top');
+		el.setStyle('padding-top', el.getStyle('padding-top').slice(0,-2)*1 + rteHeight);
 	},
 	
 	textArea: function (el){
